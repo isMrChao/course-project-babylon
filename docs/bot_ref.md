@@ -11,13 +11,13 @@ We will run the script on local computer, or on the cloud [Codesphere](https://c
 
 ```js
 pip install --user pipenv
-pipenv shell
+pip install shell
 ```
 
 **install the Alpaca API**
 
 ```js
-pipenv install alpaca_trade_api`
+pip3 install alpaca-trade-api
 ```
 
 **Library**
