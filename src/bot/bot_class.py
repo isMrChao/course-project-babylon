@@ -1,6 +1,16 @@
 import alpaca_trade_api as tradeapi
 
 class BOT:
+    """ 
+    --Tass created Feb 16 2023--
+    last update Feb 16 2023
+    
+    A class used to 
+    - get trading bot information and working status
+    - read data from Alpaca market
+    - place, change, cancel orders
+    
+    """
     def __init__(self):
         self.SEC_KEY = ''
         self.PUB_KEY = ''
@@ -27,7 +37,7 @@ class BOT:
         move = 'buy'
         if dir == 0: move = 'sell'
         
-        self.api.submit_order(
+        self.api.submit_order (
             symbol=symb; # Replace with the ticker of the stock you want to buy
             qty=quant,
             side= move,

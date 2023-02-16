@@ -1,6 +1,7 @@
 class Event:
     """ 
     --Tass created Feb 15 2023--
+    last update Feb 16 2023
     
     A class used to 
     - dump timestamp from trading book
