@@ -1,2 +1,2 @@
 # CS222_TradingBOT
-CS222 project: TradingView BOT
+CS222 project: Crypto BOT
