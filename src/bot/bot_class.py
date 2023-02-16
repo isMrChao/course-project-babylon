@@ -51,4 +51,7 @@ class BOT:
     def read_data(self, symbol):
         market_data = self.api.get_barset(symbol, 'minute', limit=1)
         
-    
+    def reset_bot(self):
+        self.SEC_KEY = ''
+        self.PUB_KEY = ''
+        self.status = 0
