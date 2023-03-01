@@ -1,5 +1,6 @@
 import os
 import alpaca_trade_api as tradeapi
+from alpaca.trading.client import TradingClient
 from math import floor
 
 class Event:
@@ -53,29 +54,31 @@ class Execution:
         self._API_KEY = None
         self._SECRET = None
         self.BASE_URL = 'https://paper-api.alpaca.markets'
-        self.api = None
+        self.trading_client = None
         self.account = None
         self.cash_to_spend = 0;
     
     def login(self, api, secret):
         self._API_KEY = api
         self._SECRET = secret
-        if (self.set_client()):
-            self.set_account()
-            print("LOGIN SUCCEED!")
+        self.set_client()
+        self.set_account()
+        print("LOGIN SUCCEED!")
         
     def set_account(self):
-        if self.api != None:
-            self.account = self.api.get_account()
+        if self.trading_client != None:
+            self.account = self.trading_client.get_account()
         else:
             print("set_account: NO CLIENT FOUND")
     
     def set_client(self):
         if self._API_KEY != None and self._SECRET!= None:
-            self.api = tradeapi.REST(key_id= self._API_KEY, secret_key=self._SECRET, base_url=self.BASE_URL)
+            #self.trading_client = TradingClient('api-key', 'secret-key', paper=True)
+            self.trading_client = tradeapi.REST(key_id= self._API_KEY, secret_key=self._SECRET, base_url=self.BASE_URL)
+            print("set_client: SUCCEED")
         else:
             print("set_client: KEYS INVALID")
-            
+    
     def get_account_cash(self):
         return float(self.account.cash)
     
@@ -97,7 +100,7 @@ class Execution:
     
     def check_symbol(self, symbol: str) ->str:
         if not symbol.replace(" ", "").isalnum(): 
-            print("INVALID SYMBOL: %s\n", symbol)
+            print("[INVALID SYMBOL] ", symbol)
             return None
         
         # Valid, uniform format
@@ -106,11 +109,11 @@ class Execution:
         
     
     def delete_symbol(self, symbol:str):
-        valid_symbol = self.check_symbol(self, symbol)
+        valid_symbol = self.check_symbol(symbol)
         if valid_symbol not in self._SYMBOLS: 
-            print("symbol not found in buckets\n")
+            print("[Symbol not found]")
             return None
-        self._symbolS.remove(valid_symbol)
+        self._SYMBOLS.remove(valid_symbol)
         del self._BOTS[valid_symbol]
     
     def start_bot(self, symbol):
@@ -133,7 +136,9 @@ class Execution:
     
     
     def get_user_info(self):
-        return [self._API_KEY, self._SECRET]
+        if self._API_KEY==None or self._SECRET==None:
+            print("[set_user_info]: KEY INVALID")
+        return self.account
     
     def set_user_info(self, new_key, new_secret):
         self._API_KEY = new_key

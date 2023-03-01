@@ -1,5 +1,12 @@
 import unittest
 from api_class import *
+
+"""
+TASS ONLY API TEST KEY
+"""
+API_KEY = "PK32AI2DQDHK074B5IMR"
+SECRET_KEY = "MwoUg7Q9cjDoh8cbTnbQrAXV8rJh7cQYpZ9vCQin"
+
 class Test_API_CLASS(unittest.TestCase):
     def test_print(self):
         user = Execution()
@@ -30,6 +37,43 @@ class Test_API_CLASS(unittest.TestCase):
         self.assertEqual(len(symbols), 2)
         for i in range(len(symbols)):
             self.assertEqual(symbols[i], s[i])
+            
+            
+    def test_del_symbols(self):
+        user = Execution()
+        user.add_symbol("btc eth")
+        user.add_symbol("SolonaUsdt")
+        user.add_symbol("UST")
+        user.delete_symbol("btceth")
+        self.assertEqual(user.get_symbols(), ["SOLONAUSDT", "UST"])
+        user.delete_symbol("btceth")
+        self.assertEqual(user.get_symbols(), ["SOLONAUSDT", "UST"])
+        user.delete_symbol("shhh")
+        self.assertEqual(user.get_symbols(), ["SOLONAUSDT", "UST"])
+        user.delete_symbol("UST")
+        self.assertEqual(user.get_symbols(), ["SOLONAUSDT"])
+        user.delete_symbol("SOLONAUSDT")
+        self.assertEqual(user.get_symbols(), [])
+        
+    def test_login(self):
+        user = Execution()
+        user.login(API_KEY,SECRET_KEY)
+        #user.get_user_info()
+        #self.assertEqual(user.get_user_info(), [API_KEY, SECRET_KEY])
+        self.assertEqual(user.get_account_cash(), 100000.0)
+        
+        
+        
+    def test_bot_status(self):
+        user = Execution()
+        user.add_symbol("BTCUSDT")
+        user.start_bot("USDT")
+        self.assertEqual(user._BOTS["USDT"], 1)
+        user.pause_bot("USDT")
+        self.assertEqual(user._BOTS["USDT"], 0)
+        user.reset_bot("USDT")
+        self.assertEqual(user._BOTS["USDT"], -1)
+
             
 
 if __name__ == '__main__':
